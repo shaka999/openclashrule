@@ -13,11 +13,13 @@ dns:
   use-hosts: true
   respect-rules: true
   default-nameserver: [223.5.5.5, 119.29.29.29, 114.114.114.114, 8.8.8.8, 1.1.1.1]
-  proxy-server-nameserver: [127.0.0.1:5353]
+  # 节点域名解析：使用公共 DNS，通用可移植；如本机有 AdGuard Home 可改回 [127.0.0.1:5353]
+  proxy-server-nameserver: [223.5.5.5, 8.8.8.8]
   nameserver: [223.5.5.5, 119.29.29.29, 114.114.114.114]
   nameserver-policy:
-    'geosite:cn': [127.0.0.1:5353]
-    'geosite:private': [127.0.0.1:5353]
+    # 国内域名用国内 DNS 解析，不走国外 DoH；如本机有 AdGuard Home 可改回 [127.0.0.1:5353]
+    'geosite:cn': [223.5.5.5, 119.29.29.29, 114.114.114.114]
+    'geosite:private': [223.5.5.5, 119.29.29.29, 114.114.114.114]
   fallback: [https://dns.google/dns-query, https://dns.cloudflare.com/dns-query, https://dns.quad9.net/dns-query]
   fallback-filter: { geoip: true, geoip-code: CN, geosite: [gfw], ipcidr: [240.0.0.0/4], domain: [+.google.com, +.facebook.com, +.youtube.com] }
 sniffer:
