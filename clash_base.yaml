@@ -12,13 +12,13 @@ dns:
   fake-ip-range: 198.18.0.1/16
   use-hosts: true
   respect-rules: true
-  default-nameserver: [223.5.5.5, 119.29.29.29, 114.114.114.114]
+  default-nameserver: [223.5.5.5, 119.29.29.29, 114.114.114.114, 8.8.8.8, 1.1.1.1]
   proxy-server-nameserver: [127.0.0.1:5353]
   nameserver: [223.5.5.5, 119.29.29.29, 114.114.114.114]
   nameserver-policy:
     'geosite:cn': [127.0.0.1:5353]
     'geosite:private': [127.0.0.1:5353]
-  fallback: [tls://1.1.1.1:853, tls://8.8.8.8:853]
+  fallback: [https://dns.google/dns-query, https://dns.cloudflare.com/dns-query, https://dns.quad9.net/dns-query]
   fallback-filter: { geoip: true, geoip-code: CN, geosite: [gfw], ipcidr: [240.0.0.0/4], domain: [+.google.com, +.facebook.com, +.youtube.com] }
 sniffer:
   enable: true
@@ -27,7 +27,7 @@ sniffer:
   parse-pure-ip: false
 tun:
   enable: true   # TUN 模式已开启；不支持代理的 App 也会走规则
-  stack: system
+  stack: mixed
   dns-hijack:
     - 0.0.0.0:53
   auto-route: true
