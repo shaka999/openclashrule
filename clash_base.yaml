@@ -1,20 +1,49 @@
-port: 7890
+# ==========================================================
+# OpenClash 基础配置（增强版）
+# 改进：store-selected / store-fake-ip / tcp-concurrent / udp
+#       geodata-mode + geox-url（显式声明 GEO 数据库）
+#       experimental sniff 增强 / fake-ip-filter 白名单
+# ==========================================================
+mixed-port: 7890
 socks-port: 7891
-allow-lan: false
-mode: Rule
+allow-lan: true
+bind-address: "*"
+mode: rule
 log-level: info
-external-controller: 0.0.0.0:9090   # 控制面板地址：0.0.0.0 表示局域网可访问（配合 secret 使用），也可改成 127.0.0.1:9090 仅本机访问
+ipv6: false
+udp: true
 unified-delay: true
+tcp-concurrent: true
+
+external-controller: 0.0.0.0:9090   # 控制面板地址：0.0.0.0 表示局域网可访问（配合 secret 使用），也可改成 127.0.0.1:9090 仅本机访问
+
+profile:
+  store-selected: true    # 记住手动选择的节点（重启不丢）
+  store-fake-ip: true     # 记住 Fake-IP 映射
+
 dns:
   enable: true
+  listen: 0.0.0.0:7874
   ipv6: false
   enhanced-mode: fake-ip
   fake-ip-range: 198.18.0.1/16
+  fake-ip-filter:
+    - '*.lan'
+    - '*.local'
+    - '*.localdomain'
+    - 'localhost'
+    - 'time.*'
+    - 'ntp.*'
+    - 'time.windows.com'
+    - 'time.apple.com'
+    - 'time.cloudflare.com'
+    - 'router.asus.com'
+    - 'routerlogin.net'
   use-hosts: true
   respect-rules: true
-  default-nameserver: [223.5.5.5, 119.29.29.29, 114.114.114.114, 8.8.8.8, 1.1.1.1]
   # 节点域名解析：使用公共 DNS，通用可移植；如本机有 AdGuard Home 可改回 [127.0.0.1:5353]
-  proxy-server-nameserver: [223.5.5.5, 8.8.8.8]
+  default-nameserver: [223.5.5.5, 119.29.29.29, 114.114.114.114]
+  proxy-server-nameserver: [223.5.5.5, 119.29.29.29]
   nameserver: [223.5.5.5, 119.29.29.29, 114.114.114.114]
   nameserver-policy:
     # 国内域名用国内 DNS 解析，不走国外 DoH；如本机有 AdGuard Home 可改回 [127.0.0.1:5353]
@@ -22,11 +51,29 @@ dns:
     'geosite:private': [223.5.5.5, 119.29.29.29, 114.114.114.114]
   fallback: [https://dns.google/dns-query, https://dns.cloudflare.com/dns-query, https://dns.quad9.net/dns-query]
   fallback-filter: { geoip: true, geoip-code: CN, geosite: [gfw], ipcidr: [240.0.0.0/4], domain: [+.google.com, +.facebook.com, +.youtube.com] }
+
+# ==========================================================
+# GEO 数据库声明（与 OpenClash 数据库页面对齐）
+# 显式指定 meta-rules-dat 数据库，避免旧库缺新分类（如 category-ai-!cn）
+# ==========================================================
+geodata-mode: true
+geox-url:
+  geoip: https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat
+  geosite: https://github.com/MetaCubeX/meta-rules-dat/releases/latest/download/geosite.dat
+
+# ==========================================================
+# 实验性特性（安全开启）
+# ==========================================================
+experimental:
+  sniff-tls-sni: true
+  sniff-http-host: true
+
 sniffer:
   enable: true
   sniff: { TLS: { ports: [443], override-destination: true }, HTTP: { ports: [80], override-destination: true } }
   skip-domain: ['Mijia Cloud', dlg.io.mi.com]
   parse-pure-ip: false
+
 tun:
   enable: true   # TUN 模式已开启；不支持代理的 App 也会走规则
   stack: mixed
@@ -34,6 +81,7 @@ tun:
     - 0.0.0.0:53
   auto-route: true
   auto-detect-interface: true
+
 proxies:
 proxy-groups:
 rules:
