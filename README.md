@@ -6,7 +6,7 @@ OpenClash 订阅转换配置仓库（Clash Meta 内核优化版）
 
 | 文件 | 用途 |
 |------|------|
-| ACL4SSR_Online_optimized.ini | **主配置模板（推荐）**：ACL4SSR 在线版 + CDN 优化 |
+| openclash-optimized.ini | **主配置模板（推荐）**：ACL4SSR 在线版 + CDN 优化 |
 | clash_base.yaml | 基础配置模板（端口/DNS/TUN/geodata） |
 | hf_pt_direct.list / play_direct.list / play_proxy.list / dns_upstream.list | 辅助规则列表 |
 
@@ -15,7 +15,7 @@ OpenClash 订阅转换配置仓库（Clash Meta 内核优化版）
 1. **配置订阅** → 添加订阅
 2. 填写：订阅地址（机场链接）、在线订阅转换=开启
 3. 订阅转换后端：https://api.asailor.org/sub
-4. 订阅转换模板：https://raw.githubusercontent.com/shaka999/openclashrule/main/ACL4SSR_Online_optimized.ini
+4. 订阅转换模板：https://raw.githubusercontent.com/shaka999/openclashrule/main/openclash-optimized.ini
 5. 保存并「更新配置」
 
 ## 特性
